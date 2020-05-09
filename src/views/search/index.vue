@@ -49,7 +49,7 @@ export default {
         padding: 10px;
     }
     .search {
-        background: url("../../assets/img/80942286_p0.png")  center 0 no-repeat;
+        /*background: url("../../assets/img/80942286_p0.png")  center 0 no-repeat;*/
         background-size:cover;
     }
 
