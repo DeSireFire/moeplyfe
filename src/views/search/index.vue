@@ -41,14 +41,17 @@ export default {
         color: #333;
         line-height: 60px;
     }
+    /* 主体内容模块，作为.search子盒子使用 flex: auto; 布局达到它撑满屏幕高度*/
     .el-main {
-        /*border-radius: 10px;*/
-        /*border:aqua 2px solid;*/
         background-color: rgba(96,98,102,0.2);
-        /*margin: 1% 1% 1% 1%;*/
         padding: 10px;
+        flex: auto;
     }
+    /* 搜索首页，定义背景和flex布局撑满 */
     .search {
+        display: flex;
+        height: 100vh;
+        flex-direction: column;
         /*background: url("../../assets/img/80942286_p0.png")  center 0 no-repeat;*/
         background-size:cover;
     }

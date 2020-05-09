@@ -43,7 +43,7 @@
                                 align="center"
                                 min-width="10%">
                             <template slot-scope="{row}">
-                                <el-button :href="row.magnet" type="success" icon="el-icon-download" size="mini"></el-button>
+                                <el-button :href="row.magnet" type="primary" icon="el-icon-download" size="mini"></el-button>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -186,6 +186,11 @@
 
     /* 默认样式修改 */
 
+    /* 修改mini表格中 按钮样式 */
+    .table-datas >>> .el-button--mini,.table-datas >>>  .el-button--mini.is-round {
+        padding: 7px 7px;
+    }
+
     /* 修改table row 底边线 */
     .table-datas >>> .el-table td.table-datas >>>  .el-table th.is-leaf {
         border-bottom: 1px solid rgba(245,231,158,0.8);
@@ -201,16 +206,18 @@
         background: rgba(153,204,255,0.3);
     }
 
-    /*  */
+    /* 修改鼠标移入时背景色特效 */
     .table-datas >>> .el-table--enable-row-hover .el-table__body tr:hover>td {
         background-color: rgba(245,231,158,0.3);
     }
 
+    /* 修改表头背景色和字体颜色 */
     .table-datas >>> .el-table th {
         background: rgba(173, 216, 230, 1);
         color: white;
     }
 
+    /* 修改表 tr(行) 的背景色透明 进而通过.el-table的背景色来控制统一背景色 */
     .table-datas >>> .el-table tr {
         background-color: transparent;
     }
@@ -230,6 +237,8 @@
         max-width: 100%;
         color: #606266;
         background-color: rgba(255,255,255,0.3);
+        border-radius: 10px;
+        /*border: 1px solid #99CCFF;*/
     }
 
     /* 更改element-UI input样式 */
