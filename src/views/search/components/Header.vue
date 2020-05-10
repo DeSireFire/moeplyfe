@@ -5,10 +5,11 @@
                 class=""
                 mode="horizontal"
                 @select="handleSelect"
-                background-color="#606266"
                 text-color="#fff"
-                active-text-color="#ffd04b">
-            <el-menu-item index="0">Logo</el-menu-item>
+                active-text-color="#99CCFF">
+            <el-menu-item class="logo" index="/">
+                <img  src="../../../assets/img/logo.png"/>
+            </el-menu-item>
         </el-menu>
     </div>
 </template>
@@ -18,7 +19,7 @@
         name: "Header",
         data() {
             return {
-                activeIndex: '0'
+                activeIndex: '/'
             };
         },
         methods: {
@@ -30,7 +31,39 @@
 </script>
 
 <style scoped>
-    .el-menu {
-        background-color:transparent !important;
+    /* 图标logo */
+
+
+
+    .logo > img {
+        max-width: 80%;
+        max-height: 100%;
+        display: block;
+        margin-top: 5%;
+    }
+    .logo {
+        border:0;
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    /* 去除第一个导航选项的底线 */
+    .Header >>> .el-menu-item.is-active:nth-child(1) {
+        border-bottom: none;
+    }
+
+    /* 去除导航底线 */
+    .Header .el-menu.el-menu--horizontal {
+        border-bottom: none;
+    }
+
+    /* 设置导航部分背景透明以确保跟父标签的背景一致 */
+    .Header .el-menu {
+        background-color:transparent;
+    }
+
+    /* 修改导航字体大小 */
+    .Header >>> .el-menu-item {
+        font-size: larger;
     }
 </style>

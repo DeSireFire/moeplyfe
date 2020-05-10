@@ -38,6 +38,7 @@ export default {
 <style scoped>
     .el-header, .el-footer {
         background-color: rgba(96,98,102,0.5);
+        /*background-color:transparent;*/
         color: #333;
         line-height: 60px;
     }
@@ -52,7 +53,7 @@ export default {
         display: flex;
         height: 100vh;
         flex-direction: column;
-        /*background: url("../../assets/img/80942286_p0.png")  center 0 no-repeat;*/
+        background: url("../../assets/img/80942286_p0.png")  center 0 no-repeat;
         background-size:cover;
     }
 
