@@ -10,6 +10,11 @@ import 'normalize.css'
 import ElementUI from'element-ui';
 import'element-ui/lib/theme-chalk/index.css';
 
+// axios 导入
+import axios from "axios";
+
+Vue.prototype.$axios = axios;
+
 Vue.use(ElementUI);
 
 Vue.config.productionTip = false
