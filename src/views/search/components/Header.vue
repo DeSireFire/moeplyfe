@@ -46,6 +46,13 @@
         display: table-cell;
         vertical-align: middle;
     }
+    /* 修改导航条伪类样式 */
+    .Header >>> .el-menu--horizontal>.el-menu-item:not(.is-disabled):focus,
+    .Header >>> .el-menu--horizontal>.el-menu-item:not(.is-disabled):hover:nth-child(1),
+    .Header >>> .el-menu--horizontal>.el-submenu .el-submenu__title:hover
+    {
+        background-color: transparent;
+    }
 
     /* 去除第一个导航选项的底线 */
     .Header >>> .el-menu-item.is-active:nth-child(1) {

@@ -5,14 +5,22 @@
                 <img class="logo" src="../../../assets/img/logo.png"/>
             </el-col>
             <el-col :span="24" class="content-row">
-                <el-form :inline="true" :model="formInline" class="form-inline" label-width="100px">
+                <el-form :inline="true" :model="formInline" @submit.native.prevent @keyup.enter.native="onSubmit" class="form-inline" label-width="100px">
                     <el-input class="search-input" clearable autosize v-model="formInline.kw" placeholder="搜 索" prefix-icon="el-icon-search"></el-input>
                     <el-button icon="el-icon-search" type="primary" @click="onSubmit">搜 索</el-button>
                 </el-form>
             </el-col>
+            <el-col :span="24" class="content-row search-info">
+                <span v-show="formInline.kw.length>0">关键词： {{ formInline.kw }} Go!</span>
+                <span v-show="formInline.p>0">当前第 {{ formInline.p }} 页</span>
+            </el-col>
             <el-col :span="24" class="content-row">
                 <div class="table-datas">
                     <el-table
+                            v-loading="LoadingRes.table"
+                            element-loading-text="少女祈祷中..."
+                            element-loading-spinner="el-icon-loading"
+                            element-loading-background="rgba(255, 255, 255,0.6)"
                             :data="tableData"
                             stripe
                             fit
@@ -64,6 +72,21 @@
                     </el-table>
                 </div>
             </el-col>
+            <el-col :span="24" class="content-row">
+                <!-- 三端分离后使用的分页方案 -->
+                <!-- :total="paginationInfo.total" -->
+                <!-- layout="total, sizes, prev, pager, next, jumper" -->
+                <el-pagination
+                        v-show="paginationInfo.total>0"
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="paginationInfo.page"
+                        :page-sizes="paginationInfo.limit"
+                        :page-size="paginationInfo.total"
+                        layout="jumper"
+                        >
+                </el-pagination>
+            </el-col>
         </el-row>
     </div>
 </template>
@@ -79,8 +102,15 @@ export default {
                 kw: '',
                 p: '',
             },
-            page:1,
-            tableData: []
+            tableData: [],
+            LoadingRes: {
+                table:true,
+            },
+            paginationInfo:{
+                page: 1,
+                limit: [100, 200],
+                total: 10000,
+            },
         }
     },
     created(){
@@ -88,14 +118,25 @@ export default {
         this.getList()
     },
     methods:{
+        // 传参数并获取列表
         getList() {
-            fetchList().then(response => {
-                console.log(process.env.NODE_ENV)
-                this.tableData = response.datas.Bitems
-                this.total = response.datas.page
+            fetchList(this.formInline).then(response => {
+                // 数据列表
+                this.tableData = response.data.Bitems;
+                // 数据总和数
+                this.paginationInfo.total = response.data.Bitems.length;
+                // 关闭加载loding
+                this.LoadingRes.table = false;
             })
         },
-
+        // 搜索提交
+        onSubmit() {
+            // 使用搜索关键词，回转到首页
+            this.formInline.p = 1;
+            // 开启loading
+            this.LoadingRes.table = true;
+            this.getList()
+        },
         // 磁性链接组装
         magnetSplice(hash,dn,trackers) {
             const A = Array(trackers)
@@ -105,11 +146,13 @@ export default {
             magnet += A.join("&tr=");
             return magnet
         },
-        onSubmit() {
-            fetchList(this.formInline).then(response => {
-                this.tableData = response.datas.Bitems
-                this.total = response.datas.page
-            })
+        // 分页控制
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+            this.formInline.p = val;
+            this.getList()
         }
     }
 }
@@ -122,6 +165,14 @@ export default {
         width: 100%;
         max-width: 2400px;
         min-width: 760px;
+    }
+    /* 搜素下简要信息 */
+    .search-info {
+        color: #fff;
+        font-size: 15px;
+    }
+    .search-info > span{
+        padding-right: 15px;
     }
     .content-row{
         display: -webkit-flex;
@@ -156,6 +207,7 @@ export default {
 
 
     /* 默认样式修改 */
+
     /* 去除伪类的背景色 */
     .table-datas >>> .el-table--border::after,
     .table-datas >>> .el-table--group::after,
@@ -226,7 +278,7 @@ export default {
     /* 更改element-UI input样式 */
     .search-input >>> .el-input__inner {
         -webkit-appearance: none;
-        background-color: rgba(153,204,255,0.1);
+        background-color: rgba(153,204,255,0.3);
         border: 1px solid #99CCFF;
         /*border: 1px solid #99CCFF;*/
         background-image: none;

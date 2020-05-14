@@ -35,7 +35,6 @@ service.interceptors.response.use(
     response => {
     // 响应数据
     const res = response.data
-    console.log(res);
     // 自定义状态码检测
     if (res.status !== 200) {
         Message({

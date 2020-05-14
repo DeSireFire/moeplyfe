@@ -39,7 +39,7 @@ export default {
     .el-header, .el-footer {
         background-color: rgba(96,98,102,0.5);
         /*background-color:transparent;*/
-        color: #333;
+        color: #f2f3f3;
         line-height: 60px;
     }
     /* 主体内容模块，作为.search子盒子使用 flex: auto; 布局达到它撑满屏幕高度*/
