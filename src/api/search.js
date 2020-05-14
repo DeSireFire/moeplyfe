@@ -1,8 +1,8 @@
-import request from '@/utils/request'
+import request from '../utils/requests'
 
 export function fetchList(query) {
     return request({
-        url: '/api/search/',
+        url: 'search/',
         method: 'get',
         params: query
     })
