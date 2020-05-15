@@ -164,7 +164,6 @@ export default {
     .table-datas{
         width: 100%;
         max-width: 2400px;
-        min-width: 760px;
     }
     /* 搜素下简要信息 */
     .search-info {
@@ -196,13 +195,15 @@ export default {
     .logo{
         margin-top: 10%;
         vertical-align:bottom;
+        max-width:100%;
+        overflow:hidden;
     }
     .search-input {
         background-color: transparent !important;
         box-sizing: border-box;
         width: 60%;
         max-width: 800px;
-        min-width: 600px;
+        min-width: 300px;
     }
 
 

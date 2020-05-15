@@ -33,13 +33,12 @@
 <style scoped>
     /* 图标logo */
 
-
-
     .logo > img {
-        max-width: 80%;
+        max-width: 70%;
         max-height: 100%;
         display: block;
         margin-top: 5%;
+        overflow:hidden;
     }
     .logo {
         border:0;

@@ -36,9 +36,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <!-- 添加“作用域”属性以将CSS仅限于此组件 -->
 <style scoped>
-    .el-header, .el-footer {
+    .el-footer {
         background-color: rgba(96,98,102,0.5);
-        /*background-color:transparent;*/
+        color: #f2f3f3;
+    }
+    .el-header {
+        background-color: rgba(96,98,102,0.5);
         color: #f2f3f3;
         line-height: 60px;
     }

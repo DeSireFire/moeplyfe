@@ -1,6 +1,6 @@
 <template>
     <div class="Footer">
-        <el-row>
+        <el-row align="middle">
             <el-col :span="24" align="middle">
                 <span> Copyright 2016-2020 MoePly </span>|
                 <span> Powered by <a href="https://github.com/DeSireFire">RaXianch</a> Procject </span>|
@@ -17,8 +17,18 @@
 </script>
 
 <style scoped>
+    .Footer {
+        height: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+
+    }
     .el-footer{
         color: #f2f3f3;
+        height: auto;
     }
     .el-col > span > a:link {
         font-size: 20px;
