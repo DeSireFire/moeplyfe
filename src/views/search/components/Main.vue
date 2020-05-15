@@ -51,8 +51,10 @@
                                 align="center"
                                 min-width="10%">
                             <template slot-scope="{row}">
-                                <el-button :href="magnetSplice(row.magnet,row.mtitle,row.trackers)" type="primary" icon="el-icon-download" size="mini" alt="磁链x32"></el-button>
-                                <el-button :href="magnetSplice(row.magnetSpare,row.mtitle,row.trackers)" type="primary" icon="el-icon-download" size="mini" alt="磁链x40"></el-button>
+                                <div class="butt">
+                                    <el-button :href="magnetSplice(row.magnet,row.mtitle,row.trackers)" type="primary" icon="el-icon-download" size="mini" alt="磁链x32"></el-button>
+                                    <el-button :href="magnetSplice(row.magnetSpare,row.mtitle,row.trackers)" type="primary" icon="el-icon-download" size="mini" alt="磁链x40"></el-button>
+                                </div>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -102,7 +104,72 @@ export default {
                 kw: '',
                 p: '',
             },
-            tableData: [],
+            tableData: [
+                // {
+                //     "mtitle": "花園壓制組[Snow-Raws] 大叔与棉花糖/Ojisan to Marshmallow/おじさんとマシュマロ (BD 1920x1080 HEVC-YUV420P10 FLAC)",
+                //     "mdate": "2020-05-15 10:32",
+                //     "mpublisher": "chenai",
+                //     "msize": "2.0GB",
+                //     "morigin": "dmhy",
+                //     "murl": "https://share.dmhy.org/topics/view/540922_Snow-Raws_Ojisan_to_Marshmallow_BD_1920x1080_HEVC-YUV420P10_FLAC.html",
+                //     "magnet": "VF3D3YB2UO7X4IVZOAQHLMOSADXCLPBY",
+                //     "magnetSpare": "a9763de03aa3bf7e22b9702075b1d200ee25bc38",
+                //     "trackers": [
+                //         "http://104.238.198.186:8000/announce",
+                //         "udp://104.238.198.186:8000/announce",
+                //         "http://tracker.openbittorrent.com:80/announce",
+                //         "udp://tracker3.itzmx.com:6961/announce",
+                //         "http://tracker4.itzmx.com:2710/announce",
+                //         "http://tracker.publicbt.com:80/announce",
+                //         "http://tracker.prq.to/announce",
+                //         "http://open.acgtracker.com:1096/announce",
+                //         "https://t-115.rhcloud.com/only_for_ylbud",
+                //         "http://tracker1.itzmx.com:8080/announce",
+                //         "http://tracker2.itzmx.com:6961/announce",
+                //         "udp://tracker1.itzmx.com:8080/announce",
+                //         "udp://tracker2.itzmx.com:6961/announce",
+                //         "udp://tracker3.itzmx.com:6961/announce",
+                //         "udp://tracker4.itzmx.com:2710/announce",
+                //         "http://share.camoe.cn:8080/announce",
+                //         "http://t.nyaatracker.com/announce",
+                //         "http://opentracker.acgnx.se/announce",
+                //         "http://opentracker.acgnx.com:6869/announce",
+                //         "http://nyaa.tracker.wf:7777/announce"
+                //     ]
+                // },
+                // {
+                //     "mtitle": "花園壓制組[Snow-Raws] 水母食堂/Kurage no Shokudou/クラゲの食堂(BD 1920x1080 HEVC-YUV420P10 FLAC)",
+                //     "mdate": "2020-05-15 10:32",
+                //     "mpublisher": "chenai",
+                //     "msize": "856MB",
+                //     "morigin": "dmhy",
+                //     "murl": "https://share.dmhy.org/topics/view/540921_Snow-Raws_Kurage_no_Shokudou_BD_1920x1080_HEVC-YUV420P10_FLAC.html",
+                //     "magnet": "BYC7GWI3XJCANPXLV4B3HOGKLKK4DR73",
+                //     "magnetSpare": "0e05f3591bba4406beebaf03b3b8ca5a95c1c7fb",
+                //     "trackers": [
+                //         "http://104.238.198.186:8000/announce",
+                //         "udp://104.238.198.186:8000/announce",
+                //         "http://tracker.openbittorrent.com:80/announce",
+                //         "udp://tracker3.itzmx.com:6961/announce",
+                //         "http://tracker4.itzmx.com:2710/announce",
+                //         "http://tracker.publicbt.com:80/announce",
+                //         "http://tracker.prq.to/announce",
+                //         "http://open.acgtracker.com:1096/announce",
+                //         "https://t-115.rhcloud.com/only_for_ylbud",
+                //         "http://tracker1.itzmx.com:8080/announce",
+                //         "http://tracker2.itzmx.com:6961/announce",
+                //         "udp://tracker1.itzmx.com:8080/announce",
+                //         "udp://tracker2.itzmx.com:6961/announce",
+                //         "udp://tracker3.itzmx.com:6961/announce",
+                //         "udp://tracker4.itzmx.com:2710/announce",
+                //         "http://share.camoe.cn:8080/announce",
+                //         "http://t.nyaatracker.com/announce",
+                //         "http://opentracker.acgnx.se/announce",
+                //         "http://opentracker.acgnx.com:6869/announce",
+                //         "http://nyaa.tracker.wf:7777/announce"
+                //     ]
+                // },
+            ],
             LoadingRes: {
                 table:true,
             },
@@ -136,6 +203,9 @@ export default {
             // 开启loading
             this.LoadingRes.table = true;
             this.getList()
+            setTimeout(() => {
+                this.listLoading = false
+            }, 5 * 1000)
         },
         // 磁性链接组装
         magnetSplice(hash,dn,trackers) {
@@ -161,6 +231,11 @@ export default {
 <style scoped>
 
     /*自定义样式*/
+    .form-inline {
+        width: 100%;
+        text-align: center;
+    }
+
     .table-datas{
         width: 100%;
         max-width: 2400px;
@@ -203,7 +278,6 @@ export default {
         box-sizing: border-box;
         width: 60%;
         max-width: 800px;
-        min-width: 300px;
     }
 
 
@@ -218,7 +292,7 @@ export default {
 
     /* 修改mini表格中 按钮样式 */
     .table-datas >>> .el-button--mini,.table-datas >>>  .el-button--mini.is-round {
-        padding: 7px 7px;
+        padding: 1px;
     }
 
     /* 修改table row 底边线 */
@@ -318,6 +392,13 @@ export default {
     }
 
     /* 更改element-UI 按钮样式 */
+    .butt {
+        text-align: center;
+    }
+    .butt > button{
+        margin-left: 5%;
+        margin-right: 5%;
+    }
     .el-button--primary {
         color: #fff;
         font-size: 12px;
@@ -337,5 +418,8 @@ export default {
     .el-button--primary:focus {
         background-color: rgba(153,204,255,0.5);
         border: 1px solid #99CCFF;
+    }
+    .el-button+.el-button {
+        margin: 0px;
     }
 </style>
