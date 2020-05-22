@@ -6,10 +6,15 @@
                 mode="horizontal"
                 @select="handleSelect"
                 text-color="#fff"
+                :collapse-transition="true"
                 active-text-color="#99CCFF">
             <el-menu-item class="logo" index="/">
-                <img  src="../../../assets/img/logo.png"/>
+                <img  src="../assets/img/logo.png"/>
             </el-menu-item>
+            <el-submenu class="submenu" index="2">
+                <template class="submenu-title" slot="title">工具箱</template>
+                <el-menu-item class="submenu-item" index="2-1">选项1</el-menu-item>
+            </el-submenu>
         </el-menu>
     </div>
 </template>
@@ -31,8 +36,9 @@
 </script>
 
 <style scoped>
-    /* 图标logo */
 
+
+    /* 图标logo */
     .logo > img {
         max-width: 70%;
         max-height: 100%;
@@ -72,4 +78,5 @@
     .Header >>> .el-menu-item {
         font-size: larger;
     }
+
 </style>

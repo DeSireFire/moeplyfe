@@ -24,6 +24,7 @@
         justify-content: center;
         width: 100%;
         text-align: center;
+        color: #f2f3f3;
 
     }
     .el-footer{
