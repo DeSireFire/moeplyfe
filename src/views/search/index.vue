@@ -1,17 +1,23 @@
 <template>
     <div class="search">
-<!--        <Search/>-->
+        <Stitle/>
+        <Keyword/>
+        <DataList/>
     </div>
 </template>
 
 <script>
     // @ is an alias to /src
-    // import Search from "./components/search";
+    import Stitle from "./components/stitle";
+    import Keyword from "./components/keyword";
+    import DataList from "./components/dataList";
 
     export default {
         name: 'Search',
         components: {
-            // Search,
+            Stitle,
+            Keyword,
+            DataList,
         }
     }
 </script>
