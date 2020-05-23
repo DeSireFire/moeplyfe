@@ -28,7 +28,7 @@
     /* 搜索首页，定义背景和flex布局撑满 */
     .search {
         display: flex;
-        height: 100vh;
+        /*height: 100vh;*/
         flex-direction: column;
     }
 </style>

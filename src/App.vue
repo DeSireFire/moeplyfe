@@ -1,6 +1,5 @@
 <template>
     <div id="app">
-        <el-scrollbar>
             <el-container class="moe-body">
                 <el-header>
                     <app-header v-if="header_show"></app-header>
@@ -12,7 +11,6 @@
                     <app-footer v-if="footer_show"></app-footer>
                 </el-footer>
             </el-container>
-        </el-scrollbar>
     </div>
 </template>
 
@@ -71,7 +69,13 @@
         background: url("./assets/img/80942286_p0.png")  center 0 no-repeat;
         background-size:cover;
         background-attachment:fixed;
-        flex: auto;
+        /*height: 100vh;*/
+        /*display: flex;*/
+        /*flex-direction: column;*/
+    }
+
+    .el-menu--horizontal  .el-menu {
+        background-color: rgba(96,98,102,0.5);
     }
 
     /* 滚动条 */

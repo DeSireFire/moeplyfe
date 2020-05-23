@@ -21,12 +21,6 @@
     width: 100%;
     text-align: center;
 }
-.search-input {
-    background-color: transparent !important;
-    box-sizing: border-box;
-    width: 60%;
-    max-width: 800px;
-}
 .logo{
     margin-top: 10%;
     vertical-align:bottom;
