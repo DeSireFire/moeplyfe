@@ -539,4 +539,13 @@
         margin-left: 5%;
         margin-right: 5%;
     }
+
+    /*  分页样式  */
+    .el-pagination {
+        white-space: nowrap;
+        padding: 2px 5px;
+        color: #303133;
+        font-weight: 700;
+        text-align: center;
+    }
 </style>

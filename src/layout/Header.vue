@@ -4,31 +4,55 @@
                 :default-active="activeIndex"
                 mode="horizontal"
                 @select="handleSelect"
+                @open="handleOpen"
+                @close="handleClose"
                 text-color="#fff"
+                router
                 :collapse-transition="true"
                 active-text-color="#99CCFF">
             <el-menu-item class="logo" index="/">
                 <img  src="../assets/img/logo.png"/>
             </el-menu-item>
-            <el-submenu class="submenu" index="2">
-                <template slot="title">工具箱</template>
-                <el-menu-item class="submenu-item" index="2-1">选项1</el-menu-item>
+            <el-submenu v-for="item in menu" :index="item.id" :key="item.id">
+                <template slot="title">
+                    <span v-text="item.name"></span>
+                </template>
+                <el-menu-item-group class="over-hide" v-for="sub in item.sub" :key="sub.componentName">
+                    <el-menu-item class="submenu-item" :index="'/'+item.id+'/'+sub.componentName" v-text="sub.name">
+                    </el-menu-item>
+                </el-menu-item-group>
+            </el-submenu>
+            <el-submenu class="submenu" index="/tool">
+                <template slot="title">工具箱2</template>
+                <el-menu-item class="submenu-item" index="/tools/magnetBest">磁链优化</el-menu-item>
             </el-submenu>
         </el-menu>
     </div>
 </template>
 
 <script>
+    import menu from '@/layout/components/menu-config'
     export default {
         name: "Header",
         data() {
             return {
-                activeIndex: '/'
+                activeIndex: '/',
+                menu: menu
             };
         },
         methods: {
             handleSelect(key, keyPath) {
-                console.log(key, keyPath);
+                console.log("key:"+key);
+                console.log("keyPath:"+keyPath);
+
+                // this.$router.push({ path: key+'/'+keyPath})
+                // this.$router.push({ path: keyPath})
+            },
+            handleOpen (key, keyPath) {
+                console.log(key, keyPath)
+            },
+            handleClose (key, keyPath) {
+                console.log(key, keyPath)
             }
         }
     }
@@ -99,6 +123,11 @@
     }
     .submenu-item:hover {
         background-color:rgba(153,204,255,0.5)!important;
+    }
+
+    /* 导航 i 图标 */
+    .Header >>> .el-submenu__title i {
+        color: #f5e79e;
     }
 
     /*!* 修改导航字体大小 *!*/
