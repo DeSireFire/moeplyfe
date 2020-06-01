@@ -1,16 +1,24 @@
 <template>
     <div class="tools">
-        <p>tools 页面</p>
-        <magnetBest/>
+        <div class="toolsTitle">
+            <p>{{toolsName}}</p>
+        </div>
+        <div class="toolsMain">
+            <router-view/>
+        </div>
+        <div class="toolsInfo">
+            <p>信息内容</p>
+        </div>
     </div>
 </template>
 
 <script>
-    import magnetBest from "./components/magnetBest"
     export default {
         name: "tools",
-        components: {
-            magnetBest
+        computed : {
+            toolsName () {
+                return this.$route.name
+            }
         }
     }
 </script>

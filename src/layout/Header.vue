@@ -3,9 +3,6 @@
         <el-menu
                 :default-active="activeIndex"
                 mode="horizontal"
-                @select="handleSelect"
-                @open="handleOpen"
-                @close="handleClose"
                 text-color="#fff"
                 router
                 :collapse-transition="true"
@@ -22,10 +19,6 @@
                     </el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
-            <el-submenu class="submenu" index="/tool">
-                <template slot="title">工具箱2</template>
-                <el-menu-item class="submenu-item" index="/tools/magnetBest">磁链优化</el-menu-item>
-            </el-submenu>
         </el-menu>
     </div>
 </template>
@@ -41,19 +34,6 @@
             };
         },
         methods: {
-            handleSelect(key, keyPath) {
-                console.log("key:"+key);
-                console.log("keyPath:"+keyPath);
-
-                // this.$router.push({ path: key+'/'+keyPath})
-                // this.$router.push({ path: keyPath})
-            },
-            handleOpen (key, keyPath) {
-                console.log(key, keyPath)
-            },
-            handleClose (key, keyPath) {
-                console.log(key, keyPath)
-            }
         }
     }
 </script>

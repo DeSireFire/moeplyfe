@@ -17,7 +17,7 @@ const routes = [
     component: () => import('../views/tools/index'),
     children: [{
       path: 'magnetBest',
-      name: 'magnetBest',
+      name: '磁性链接优化',
       component: () => import('../views/tools/components/magnetBest'),
       meta: { title: 'magnetBest', icon: 'magnetBest' }
     }]

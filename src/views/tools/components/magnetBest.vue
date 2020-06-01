@@ -1,19 +1,12 @@
 <template>
     <div class="magnetBest">
-        {{ demo }}
+        <p>magnetBest 测试页</p>
     </div>
 </template>
 
 <script>
     export default {
         name: "magnetBest",
-        computed: {
-            demo(){
-                const temp = this.$route.params
-                console.log(temp);
-                return this.$route.params.meta
-            }
-        }
     }
 </script>
 
