@@ -2,52 +2,124 @@
     <div class="magnetBest">
         <el-row align="middle">
             <el-col :span="24" class="content-row">
-                <el-input placeholder="请输入磁性链接！" v-model="input1" class="moe-input"></el-input>
-                <el-button type="primary">磁链增强</el-button>
+                <el-input placeholder="请输入磁性链接！" v-model="magnetStr" class="moe-input"></el-input>
+                <el-button type="primary" @click="onSubmit">磁链增强</el-button>
             </el-col>
-            <el-select v-model="value1" multiple placeholder="请选择">
-                <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                </el-option>
-            </el-select>
-            <el-select v-model="value1" multiple placeholder="请选择">
-                <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                </el-option>
-            </el-select>
-            <el-select v-model="value1" multiple placeholder="请选择">
-                <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                </el-option>
-            </el-select>
         </el-row>
-
+        <el-row>
+            <el-col class="content-row">
+                <label>磁链优化方案：</label>
+                <el-select v-model="selectTracks" placeholder="AnimeTrackers" clearable >
+                    <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col class="content-row">
+                <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 2, maxRows: 4}"
+                        placeholder="请输入内容"
+                        v-if="newMagnet"
+                        v-model="newMagnet">
+                </el-input>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
 <script>
     // 获取tracker列表组件
-    // import {getTrackerAll} from "@/api/trackerGet";
+    import {getTracker} from "@/api/trackerGet";
     export default {
         name: "magnetBest",
         data() {
             return {
-                input1: '',
+                magnetStr: '',
+                options: [{
+                    value: 'ATaria2_best.txt',
+                    label: '快速:Trackers'
+                }, {
+                    value: 'ATaria2_all.txt',
+                    label: '全部:Trackers'
+                }, {
+                    value: 'ATaria2_all_https.txt',
+                    label: 'HTTPS:Trackers'
+                }, {
+                    value: 'ATaria2_all_http.txt',
+                    label: 'HTTP:Trackers'
+                }, {
+                    value: 'ATaria2_all_udp.txt',
+                    label: 'udp:Trackers'
+                }, {
+                    value: 'ATaria2_all_ip.txt',
+                    label: 'ip:Trackers'
+                }
+                ],
+                selectTracks: 'ATaria2_best.txt',
+                hashMagnet:"",       // 磁链hash
+                newMagnet:"",       // 优化后的磁性链接
+                trackersList:[],    // 跟踪器列表
             }
         },
+        methods: {
+            // 磁性链接处理函数
+            magnetHandle() {
+                getTracker(this.selectTracks).then(response => {
+                    // tacker列表
+                    const A = this.trackersList.concat(response.split(','))
+                    let magnet = "magnet:?xt=urn:btih:";
+                    magnet += this.magnetStr;
+                    magnet += "&dn=" + "&tr=";
+                    magnet += A.join("&tr=");
+                    // 末尾空&tr=随便拼接个链接
+                    magnet += "https://moeply.raxianch.moe/"
+                    this.newMagnet = magnet
+                    return magnet
+                })
+            },
+            // 磁链清洗成hash
+            magnetClear() {
+                const pattern = new RegExp("magnet:\\?xt=urn:btih:[a-zA-Z0-9]*");
+                this.hashMagnet = this.magnetStr.match(pattern)[0].replace("magnet:?xt=urn:btih:","")
+                // 提取原磁链的跟踪器
+                this.trackersList = unescape(this.magnetStr).split('&tr=')
+                // 删除第一个元素
+                this.trackersList.shift()
+                // 清洗空元素
+                this.trackersList = this.trackersList.filter(function(e){ return e.replace(/(\r\n|\n|\r)/gm,"")});
+            },
+
+            async onSubmit() {
+                const pattern = new RegExp("magnet:\\?xt=urn:btih:[a-zA-Z0-9]{16,40}.*$");
+
+                if (pattern.test(this.magnetStr)) {
+                    this.magnetClear()
+                    await this.magnetHandle()
+                    if (pattern.test(this.magnetStr)) {
+                        this.$message.success('优化成功！');
+                    } else {
+                        this.$message.error('磁性链接优化出错了！');
+                    }
+                } else {
+                    this.$message.error('错了哦，不太认识这一条磁链，是写错了嘛？');
+                }
+                // console.log(this.newMagnet);
+            },
+        }
     }
 </script>
 
 <style scoped>
+    .magnetBest {
+        line-height: 0;
+    }
+
     .content-row {
         display: -webkit-flex;
         display: -moz-box;
@@ -87,7 +159,6 @@
         border-radius: 4px;
         box-sizing: border-box;
         color: #f5e79e;
-        display: inline-block;
         font-size: inherit;
         height: 40px;
         line-height: 40px;
@@ -143,6 +214,6 @@
         border: 1px solid #99CCFF;
     }
     .el-button+.el-button {
-        margin: 0px;
+        /*margin: 0px;*/
     }
 </style>

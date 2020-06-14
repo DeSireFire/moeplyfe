@@ -20,6 +20,10 @@ service.interceptors.request.use(
         if (store.state.token) {
         config.headers['X-Token'] = 'test'
         }
+        // 检测是否为请求github的静态资源
+        if (config.url.search("githubusercontent") !== -1) {
+            config.withCredentials = false
+        }
         return config
     },
     error => {
@@ -36,13 +40,17 @@ service.interceptors.response.use(
     // 响应数据
     const res = response.data
     // 自定义状态码检测
-    if (res.status !== 200) {
+    if (res.status !== 200 && res.message !== undefined) {
         Message({
           message: res.message || 'Error',
           type: 'error',
           duration: 5 * 1000
     })
         return Promise.reject(new Error(res.message || 'Error'))
+    } else if (response.request.responseURL.search("githubusercontent") !== -1) {
+        // console.log("验证获取成功！");
+        // console.log(res);
+        return res
     } else {
         return res
     }

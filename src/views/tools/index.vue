@@ -6,9 +6,9 @@
         <el-row class="toolsMain">
             <router-view/>
         </el-row>
-        <el-row align="middle" class="toolsInfo">
-            <p>信息内容</p>
-        </el-row>
+<!--        <el-row align="middle" class="toolsInfo">-->
+<!--            <p>信息内容</p>-->
+<!--        </el-row>-->
     </div>
 </template>
 
@@ -27,7 +27,7 @@
     /* 工具箱主页，定义背景和flex布局撑满 */
     .tools {
         display: flex;
-        /*height: 100vh;*/
+        height: 100vh;
         flex-direction: column;
     }
 

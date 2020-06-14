@@ -1,9 +1,9 @@
 import request from '../utils/requests'
+
 // 获取所有AT trackers
-export function getTrackerAll(query) {
+export function getTracker(trackersURL) {
     return request({
-        url: 'https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/AT_all.txt ',
+        url: 'https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/' + trackersURL,
         method: 'get',
-        params: query
     })
 }
