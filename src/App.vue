@@ -61,6 +61,7 @@
     /* 调整padding */
     .moe-body .el-main {
         /*padding: 0px;*/
+        overflow: hidden;
         background-color: rgba(96,98,102,0.2);
     }
 

@@ -23,7 +23,7 @@
             <el-col class="content-row">
                 <el-input
                         type="textarea"
-                        :autosize="{ minRows: 2, maxRows: 4}"
+                        :autosize="{ minRows: 2, maxRows: 15}"
                         placeholder="请输入内容"
                         v-if="newMagnet"
                         v-model="newMagnet">
@@ -40,7 +40,7 @@
         name: "magnetBest",
         data() {
             return {
-                magnetStr: '',
+                magnetStr: 'magnet:?xt=urn:btih:JFMZWEBLWITG5SVJJCHRH3ZC2LGPSQNY&dn=&tr=http%3A%2F%2F104.238.198.186%3A8000%2Fannounce&tr=udp%3A%2F%2F104.238.198.186%3A8000%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker3.itzmx.com%3A6961%2Fannounce&tr=http%3A%2F%2Ftracker4.itzmx.com%3A2710%2Fannounce&tr=http%3A%2F%2Ftracker.publicbt.com%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.prq.to%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=https%3A%2F%2Ft-115.rhcloud.com%2Fonly_for_ylbud&tr=http%3A%2F%2Ftracker1.itzmx.com%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker2.itzmx.com%3A6961%2Fannounce&tr=udp%3A%2F%2Ftracker1.itzmx.com%3A8080%2Fannounce&tr=udp%3A%2F%2Ftracker2.itzmx.com%3A6961%2Fannounce&tr=udp%3A%2F%2Ftracker3.itzmx.com%3A6961%2Fannounce&tr=udp%3A%2F%2Ftracker4.itzmx.com%3A2710%2Fannounce&tr=http%3A%2F%2Ftracker.acgnx.se%2Fannounce',
                 options: [{
                     value: 'ATaria2_best.txt',
                     label: '快速:Trackers'
@@ -63,6 +63,7 @@
                 ],
                 selectTracks: 'ATaria2_best.txt',
                 hashMagnet:"",       // 磁链hash
+                dnMagnet:"",       // 磁链文件名称
                 newMagnet:"",       // 优化后的磁性链接
                 trackersList:[],    // 跟踪器列表
             }
@@ -74,42 +75,62 @@
                     // tacker列表
                     const A = this.trackersList.concat(response.split(','))
                     let magnet = "magnet:?xt=urn:btih:";
-                    magnet += this.magnetStr;
-                    magnet += "&dn=" + "&tr=";
+                    magnet += this.hashMagnet;
+                    // 拼接资源名称
+                    if (this.dnMagnet) {
+                        magnet += "&dn="+this.dnMagnet+"&tr=";
+                        // 拼接完成后初始化dn变量
+                        this.dnMagnet = ""
+                    } else {
+                        magnet += "&dn="+"&tr=";
+                    }
                     magnet += A.join("&tr=");
                     // 末尾空&tr=随便拼接个链接
                     magnet += "https://moeply.raxianch.moe/"
                     this.newMagnet = magnet
-                    return magnet
                 })
             },
             // 磁链清洗成hash
             magnetClear() {
                 const pattern = new RegExp("magnet:\\?xt=urn:btih:[a-zA-Z0-9]*");
+                const dnpattern = new RegExp("&dn=([\\s\\S]*?)+(?=&tr)?");
+                // 提取hash
                 this.hashMagnet = this.magnetStr.match(pattern)[0].replace("magnet:?xt=urn:btih:","")
+                // 提取dn
+                this.dnMagnet = this.magnetStr.match(dnpattern)[0].replace("&dn=","").split("&tr")[0]
+                console.log(this.dnMagnet)
+                console.log(this.hashMagnet)
                 // 提取原磁链的跟踪器
                 this.trackersList = unescape(this.magnetStr).split('&tr=')
                 // 删除第一个元素
                 this.trackersList.shift()
                 // 清洗空元素
                 this.trackersList = this.trackersList.filter(function(e){ return e.replace(/(\r\n|\n|\r)/gm,"")});
+                console.log(this.trackersList)
             },
-
-            async onSubmit() {
+            // 超时处理函数
+            timeoutPromise(promise, ms){
+                return Promise.race([promise, ms]);
+            },
+            onSubmit() {
                 const pattern = new RegExp("magnet:\\?xt=urn:btih:[a-zA-Z0-9]{16,40}.*$");
 
                 if (pattern.test(this.magnetStr)) {
+                    // 清洗磁链
                     this.magnetClear()
-                    await this.magnetHandle()
-                    if (pattern.test(this.magnetStr)) {
-                        this.$message.success('优化成功！');
-                    } else {
-                        this.$message.error('磁性链接优化出错了！');
-                    }
+                    // 创建新磁链生成 promise 对象
+                    new Promise((resolve)  => {
+                        resolve(this.magnetHandle())
+                    }).then(() => {
+                        if (this.magnetStr) {
+                            this.$message.success('优化成功！');
+                        }
+                    }).catch(() => {
+                        this.$message.error('磁性链接优化失败了！');
+                    });
                 } else {
                     this.$message.error('错了哦，不太认识这一条磁链，是写错了嘛？');
                 }
-                // console.log(this.newMagnet);
             },
         }
     }
@@ -118,6 +139,11 @@
 <style scoped>
     .magnetBest {
         line-height: 0;
+    }
+
+    .content-row > label{
+        color: #fff;
+        font-size: 15px;
     }
 
     .content-row {
