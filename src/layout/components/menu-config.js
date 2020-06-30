@@ -6,8 +6,8 @@ module.exports = [{
         name: '磁链优化',
         componentName: 'magnetBest'
     }, {
-        name: '种子转磁链(Torrent2Magnet)',
-        componentName: 'torrent2Magnet'
+        name: '种子&磁链转换',
+        componentName: 'magnet2Torrent'
     }]
 }, {
     name: '关于',

@@ -27,7 +27,7 @@
     /* 工具箱主页，定义背景和flex布局撑满 */
     .tools {
         display: flex;
-        height: 100vh;
+        min-height: 100vh;
         flex-direction: column;
     }
 

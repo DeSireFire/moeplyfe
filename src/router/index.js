@@ -15,12 +15,20 @@ const routes = [
     path: '/tools',
     redirect: '/tools/magnetBest',
     component: () => import('../views/tools/index'),
-    children: [{
+    children: [
+    {
       path: 'magnetBest',
       name: '磁性链接优化',
       component: () => import('../views/tools/components/magnetBest'),
       meta: { title: 'magnetBest', icon: 'magnetBest' }
-    }]
+    },
+    {
+      path: 'magnet2Torrent',
+      name: '磁性链接和磁力种子转换',
+      component: () => import('../views/tools/components/magnet2Torrent'),
+      meta: { title: 'magnet2Torrent', icon: 'magnet2Torrent' }
+    }
+    ]
   },
 ]
 
