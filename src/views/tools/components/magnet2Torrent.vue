@@ -19,106 +19,112 @@
                 <input type="file" ref="inputFile" @change="readFile($event)" style="display:none"  multiple />
             </el-col>
         </el-row>
+        <el-row align="middle">
+            <el-col :span="12" class="content-row">
+                <p></p>
+            </el-col>
+            <el-col :span="12" class="content-row">
+                <p>{{ t2mHash }}</p>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
 <script>
     let sha1 = require('js-sha1');
-    // let fs = require("fs");
-    // let bencode = require('bencode');
+    let bencode = require('bencode');
     export default {
         name: 'magnet2Torrent',
         data() {
             return {
+                torrentList:{},
+                t2mHash:"",
+                torrentInfo:{
+                    fileName:"",
+                    fileLength:"",
+                    creationDate:"",
+                    comment:"",
+                    Name:"",
+                    pieces:"",
+                    btHash:"",
+                    publisher:"",
+                    magnet:"",
+                    announceList:null,
+                },
             };
         },
         methods: {
+            // 读取文件流(方法一)
+            // readFile(event) {
+            //     let that = this
+            //     let file = event.target.files[0];
+            //     let reader = new FileReader();
+            //     reader.readAsArrayBuffer(file)
+            //
+            //
+            //     reader.onload = function(){ //文件读取成功回调
+            //         let torrentArrayBuffer = reader.result;  //result属性为data:URL格式,与读取方式有关
+            //         let temp = that.getInfoHash(torrentArrayBuffer)
+            //         console.log(temp);
+            //     };
+            // },
+
+            // 读取文件流(方法二)
             readFile(event) {
+                let file = event.target.files[0];
                 let reader = new FileReader();
-                reader.readAsArrayBuffer(event.target.files[0]);
-                reader.onload = function(ev) {
-                    try {
-                        let file = ev.target.result;
-                        let str = sha1(file);
-                        // outMagnets(getMagnets(arguments), arguments);
-
-                        console.log(file);
-                        console.log(str);
-                        this.getMagnets(file)
-
-                    } catch (e) {
-                        console.log(e);
-                    }
-                };
+                reader.readAsArrayBuffer(file)
+                // 因为reader.onload不能直接作为函数执行所以不能使用reader.onload(function(){})和reader.onload(()=>{});
+                reader.onload = () =>{
+                    let torrentArrayBuffer = reader.result;  //result属性为data:URL格式,与读取方式有关
+                    this.t2mHash = this.getInfoHash(torrentArrayBuffer)
+                }
             },
 
-            // 获取磁链链接，arguments为文件夹路径
-            getMagnets(file) {
-                // var fileslist = fs.readdirSync(this.arguments.toString());
-                let fileslist = file
-                let magnetlist = new Array();
+            //Uint8Array转字符串
+            Uint8ArrayToString(fileData){
+                let dataString = "";
+                for (let i = 0; i < fileData.length; i++) {
+                    dataString += String.fromCharCode(fileData[i]);
+                }
 
-                console.log(fileslist);
-                console.log(magnetlist);
+                return dataString
 
-                // for (var f in fileslist) {
-                //     // var torrentfile = null;
-                //     var filename = fileslist[f].toString();
-                //     if (filename.includes(".torrent")) {
-                //         var filepath = arguments.toString() + '/' + filename;
-                //         var magnet = getInfoHash(filepath);
-                //         if (magnet) {
-                //             magnetlist.push(magnet);
-                //         }
-                //         //console.log(magnet);
-                //     }
-                // }
-                // return magnetlist;
             },
 
-            // 将结果输出为txt
-            // outMagnets(magnets, path) {
-            //     if (magnets.length > 0) {
-            //         let writebuffer = Buffer.from(arrayToString(magnets, '\n'));
-            //         let savepath = path.toString() + '/' + "magnets.txt";
-            //         let writesteam = fs.createWriteStream(savepath);
-            //         writesteam.write(writebuffer, 'utf-8');
-            //         writesteam.end();
-            //         writesteam.on('finish', function () {
-            //             console.log("写入完成");
-            //         });
-            //         writesteam.on('error', function (err) {
-            //             console.log(err);
-            //         });
-            //     }
-            // },
+            //种子文件提取tracker列表,需传入Uint8Array数据
+            torrentGetTrackers(trackerUint8Array){
+                let dataArray = [];
+                for (let i of trackerUint8Array)  {
+                    let t = this.Uint8ArrayToString(bencode.encode(i));
+                    // 清洗掉tracker地址前不用字符串，如：l44:udp://tracker.openbittorrent.com:80/announcee 去掉l44
+                    t = t.replace(/l\d{0,2}:/,"");
+                    dataArray.push(t)
+                }
 
-            // buffer只能输出字符，所以必须将字符数组转换为字符形式，seq为分隔符
-            // arrayToString(arr, seq) {
-            //     var str_value = null;
-            //     for (a of arr) {
-            //         var astr = a.toString();
-            //         if (str_value) {
-            //             str_value = str_value + seq + astr;
-            //         } else {
-            //             str_value = astr;
-            //         }
-            //     }
-            //     return str_value;
-            // },
+                return dataArray
+
+            },
 
             // 获取种子文件的info_hash值，有一个解密，再加密的过程
-            // getInfoHash(torrentfile) {
-            //     let result = bencode.decode(fs.readFileSync(torrentfile));
-            //     if (result) {
-            //         let info = result['info']; //info 字典
-            //         let info_hash = sha1(bencode.encode(info));
-            //         let magnet = "magnet:?xt=urn:btih:" + info_hash.toString();
-            //         return magnet;
-            //     } else {
-            //         return null;
-            //     }
-            // }
+            getInfoHash(torrentfile) {
+                let result = bencode.decode(torrentfile);
+                console.log(result);
+                if (result) {
+                    // 获取磁性链接
+                    let info = result['info']; //info 字典
+                    let info_hash = sha1(bencode.encode(info));
+                    let magnet = "magnet:?xt=urn:btih:" + info_hash.toString();
+
+                    // 获取种子文件中的tracker
+                    let trackerUint8Array = result['announce-list'];
+                    let trackerlist = this.torrentGetTrackers(trackerUint8Array);
+                    console.log(trackerlist);
+                    return magnet;
+                } else {
+                    return null;
+                }
+            }
         },
         created() {},
     };
